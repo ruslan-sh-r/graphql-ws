@@ -58,6 +58,8 @@ export type EventListener<E extends Event> = E extends EventConnecting
 export interface ClientOptions {
   /** URL of the GraphQL over WebSocket Protocol compliant server to connect. */
   url: string;
+  /** The WebSocket sub-protocol used for the GraphQL over WebSocket Protocol. */
+  wsProtocol?: string;
   /**
    * Optional parameters, passed through the `payload` field with the `ConnectionInit` message,
    * that the client specifies when establishing a connection with the server. You can use this
@@ -175,6 +177,7 @@ export interface Client extends Disposable {
 export function createClient(options: ClientOptions): Client {
   const {
     url,
+    wsProtocol,
     connectionParams,
     lazy = true,
     onNonLazyError = console.error,
@@ -284,7 +287,9 @@ export function createClient(options: ClientOptions): Client {
           }
 
           emitter.emit('connecting');
-          const socket = new WebSocketImpl(url, GRAPHQL_TRANSPORT_WS_PROTOCOL);
+
+          const subProtocol = wsProtocol || GRAPHQL_TRANSPORT_WS_PROTOCOL;
+          const socket = new WebSocketImpl(url, subProtocol);
 
           socket.onclose = (event) => {
             connecting = undefined;

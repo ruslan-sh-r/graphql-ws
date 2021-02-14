@@ -140,6 +140,51 @@ it('should use the provided WebSocket implementation', async () => {
   await server.waitForClient();
 });
 
+it('should use custom SubProtocol', async () => {
+  const protocol = 'graphql-ws';
+
+  const { url, ...server } = await startTServer({
+    onConnect: (ctx) => {
+      expect(ctx.extra.request.headers['Sec-WebSocket-Protocol']).toBe(protocol);
+    }
+  });
+
+  createClient({
+    url,
+    retryAttempts: 0,
+    onNonLazyError: noop,
+    lazy: false,
+    wsProtocol: protocol
+  });
+
+  await server.waitForClient();
+});
+
+it('should use custom SubProtocol with custom WebSocket implementations', async () => {
+  const protocol = 'graphql-ws';
+
+  const { url, ...server } = await startTServer({
+    onConnect: (ctx) => {
+      expect(ctx.extra.request.headers['Sec-WebSocket-Protocol']).toBe(protocol);
+    }
+  });
+
+  Object.assign(global, {
+    WebSocket: null,
+  });
+
+  createClient({
+    url,
+    retryAttempts: 0,
+    onNonLazyError: noop,
+    lazy: false,
+    webSocketImpl: WebSocket,
+    wsProtocol: protocol
+  });
+
+  await server.waitForClient();
+});
+
 it('should not accept invalid WebSocket implementations', async () => {
   const { url } = await startTServer();
 
