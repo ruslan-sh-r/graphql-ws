@@ -145,8 +145,10 @@ it('should use custom SubProtocol', async () => {
 
   const { url, ...server } = await startTServer({
     onConnect: (ctx) => {
-      expect(ctx.extra.request.headers['Sec-WebSocket-Protocol']).toBe(protocol);
-    }
+      expect(ctx.extra.request.headers['Sec-WebSocket-Protocol']).toBe(
+        protocol,
+      );
+    },
   });
 
   createClient({
@@ -154,7 +156,7 @@ it('should use custom SubProtocol', async () => {
     retryAttempts: 0,
     onNonLazyError: noop,
     lazy: false,
-    wsProtocol: protocol
+    wsProtocol: protocol,
   });
 
   await server.waitForClient();
@@ -165,8 +167,10 @@ it('should use custom SubProtocol with custom WebSocket implementations', async 
 
   const { url, ...server } = await startTServer({
     onConnect: (ctx) => {
-      expect(ctx.extra.request.headers['Sec-WebSocket-Protocol']).toBe(protocol);
-    }
+      expect(ctx.extra.request.headers['Sec-WebSocket-Protocol']).toBe(
+        protocol,
+      );
+    },
   });
 
   Object.assign(global, {
@@ -179,7 +183,7 @@ it('should use custom SubProtocol with custom WebSocket implementations', async 
     onNonLazyError: noop,
     lazy: false,
     webSocketImpl: WebSocket,
-    wsProtocol: protocol
+    wsProtocol: protocol,
   });
 
   await server.waitForClient();

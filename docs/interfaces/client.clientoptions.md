@@ -24,6 +24,7 @@ Configuration used for the GraphQL over WebSocket client.
 - [retryWait](client.clientoptions.md#retrywait)
 - [url](client.clientoptions.md#url)
 - [webSocketImpl](client.clientoptions.md#websocketimpl)
+- [wsProtocol](client.clientoptions.md#wsprotocol)
 
 ## Properties
 
@@ -164,3 +165,11 @@ ___
 A custom WebSocket implementation to use instead of the
 one provided by the global scope. Mostly useful for when
 using the client outside of the browser environment.
+
+___
+
+### wsProtocol
+
+• `Optional` **wsProtocol**: *undefined* \| *string*
+
+The WebSocket sub-protocol used for the GraphQL over WebSocket Protocol.
